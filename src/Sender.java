@@ -24,9 +24,10 @@ public class Sender {
 				if (input.equals("1")) {
 					System.out.println("what kind of object?");
 					System.out.println("1. Simple Object(int,boolean)");
-					System.out.println("2. Simple Object With Reference");
+					System.out
+							.println("2. Simple Object With Reference(String())");
 					System.out.println("3. Array(int[])");
-					System.out.println("4. Array with References");
+					System.out.println("4. Array with References(Point(x,y))");
 					System.out.println("5. Java Collection Class");
 					System.out.println("6. Back");
 
@@ -62,8 +63,12 @@ public class Sender {
 							}
 						}
 					} else if (input.equals("2")) {
+
+						System.out.println("Enter number of points");
+
 					} else if (input.equals("3")) {
-						System.out.println("Enter field values.  Eg: '1,2,3'");
+
+						System.out.println("Enter field values. Eg: '1,2,3'");
 						bufferRead = new BufferedReader(new InputStreamReader(
 								System.in));
 						input = bufferRead.readLine();
@@ -81,6 +86,33 @@ public class Sender {
 						objList.add(obj);
 
 					} else if (input.equals("4")) {
+
+						System.out.println("Enter number of points");
+						bufferRead = new BufferedReader(new InputStreamReader(
+								System.in));
+						input = bufferRead.readLine();
+						int number = Integer.parseInt(input);
+						List<int[]> points = new ArrayList<int[]>();
+						System.out
+								.println("Enter x and y values for a point: Eg '1,2'");
+						for (int i = 0; i < number; i++) {
+							bufferRead = new BufferedReader(
+									new InputStreamReader(System.in));
+							input = bufferRead.readLine();
+							String[] xy = input.split(",");
+							if (xy.length != 2) {
+								System.out.println("must enter 2 values");
+								break;
+							} else {
+								int[] _xy = new int[2];
+								_xy[0] = Integer.parseInt(xy[0]);
+								_xy[1] = Integer.parseInt(xy[1]);
+								points.add(_xy);
+							}
+						}
+						Object obj = new refArray(points.toArray());
+						objList.add(obj);
+
 					} else if (input.equals("5")) {
 					} else if (input.equals("6")) {
 						// do nothing
