@@ -1,15 +1,15 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jdom2.Document;
+import java.io.*;
+import java.util.*;
+import org.jdom2.*;
+import org.jdom2.output.XMLOutputter;
+import java.net.Socket;
 
 public class Sender {
 	static List<Object> objList;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		String server = "localhost";
+		int port  = Integer.parseInt("3333");
 		objList = new ArrayList<Object>();
 		boolean exit_flag = false;
 		while (!exit_flag) {
@@ -70,10 +70,16 @@ public class Sender {
 					}
 				} else if (input.equals("2")) {
 					for (Object obj : objList) {
-						System.out.println(obj.toString());
-						// Document doc = Serializer.serialize(obj);
+						//System.out.println(obj.toString());
+						XMLOutputter out = new XMLOutputter();
+						Document doc = Serializer.serialize(obj);
+						out.output(doc, System.out);
+					    Socket s = new Socket(server, port);
+					    OutputStream os = s.getOutputStream();
+					    DataOutputStream dos = new DataOutputStream(os);
+					    out.output(doc, dos);
+					    s.close();
 					}
-					System.out.println("Serialized!");
 				} else if (input.equals("3")) {
 					System.out.println("Exiting...");
 					exit_flag = true;
