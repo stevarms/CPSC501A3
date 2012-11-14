@@ -5,7 +5,7 @@ import org.jdom2.*;
 import org.jdom2.output.XMLOutputter;
 import java.net.Socket;
 
-public class Sender implements createObjects {
+public class Sender {
 	static List<Object> objList;
 
 	public static void main(String[] args) throws Exception {
