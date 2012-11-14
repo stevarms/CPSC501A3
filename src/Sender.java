@@ -2,6 +2,7 @@ import java.awt.Point;
 import java.io.*;
 import java.util.*;
 import org.jdom.*;
+import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import java.net.Socket;
 
@@ -97,7 +98,7 @@ public class Sender {
 	}
 
 	public static File createFile(Document doc) throws IOException {
-		XMLOutputter out = new XMLOutputter();
+		XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
 		File aFile = new File("sentdata.xml");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(aFile));
 		out.output(doc, writer);

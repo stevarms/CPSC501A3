@@ -11,10 +11,10 @@ import org.junit.Test;
 
 public class ReceiverTest {
 	
-	String testString;
+	simpleObject obj;
 	@Before
 	public void setUp() throws Exception {
-		testString = "this is a test";
+		obj = new simpleObject(1,true);
 	}
 
 	@After
@@ -25,15 +25,15 @@ public class ReceiverTest {
 	//Tests to see that after you serialize an object and then deserialize it, you end up with
 	//essentially the same object.
 	public void testSerialize() throws Exception {
-		Document serializedDoc = Serializer.serialize(testString);
-		String deserializedObject = (String) Deserializer.deserialize(serializedDoc);
+		Document serializedDoc = Serializer.serialize(obj);
+		simpleObject deserializedObject = (simpleObject) Deserializer.deserialize(serializedDoc);
 		
 		FileOutputStream fos1 = new FileOutputStream("testSerializeBefore.txt");
 		PrintStream ps = new PrintStream(fos1);
 		System.setOut(ps);
 		
 		Inspector inspector = new Inspector();
-		inspector.inspect(testString, false);
+		inspector.inspect(obj, false);
 		
 		FileOutputStream fos2 = new FileOutputStream("testSerializeAfter.txt");
 		ps = new PrintStream(fos2);
@@ -43,6 +43,6 @@ public class ReceiverTest {
 		fos1.close();
 		fos2.close();
 		
-		assertEquals(testString, deserializedObject);
+		assertEquals(obj, deserializedObject);
 	}
 }
