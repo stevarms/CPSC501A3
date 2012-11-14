@@ -17,7 +17,8 @@ public class Sender {
 			System.out.println("Create an object?");
 			System.out.println("1. Yes");
 			System.out.println("2. No");
-			System.out.println("3. Exit");
+			System.out.println("3. List Objects");
+			System.out.println("4. Exit");
 			try {
 				BufferedReader bufferRead = new BufferedReader(
 						new InputStreamReader(System.in));
@@ -25,10 +26,13 @@ public class Sender {
 				if (input.equals("1")) {
 					System.out.println("what kind of object?");
 					System.out.println("1. Simple Object(int,boolean)");
-					System.out.println("2. Simple Object With Reference(string)");
+					System.out
+							.println("2. Simple Object With Reference(simpleObject)");
 					System.out.println("3. Array(int[])");
-					System.out.println("4. Array with References(Point[])");
-					System.out.println("5. Java Collection Class");
+					System.out
+							.println("4. Array with References(simpleObject[])");
+					System.out
+							.println("5. Java Collection Class(list<simpleObject>)");
 					System.out.println("6. Back");
 
 					bufferRead = new BufferedReader(new InputStreamReader(
@@ -36,7 +40,8 @@ public class Sender {
 					input = bufferRead.readLine();
 
 					if (input.equals("1")) {
-						createSimpleObject();
+						simpleObject obj = createSimpleObject();
+						objList.add(obj);
 					} else if (input.equals("2")) {
 						createRefObject();
 					} else if (input.equals("3")) {
@@ -53,6 +58,8 @@ public class Sender {
 				} else if (input.equals("2")) {
 					serialize(server, port);
 				} else if (input.equals("3")) {
+					System.out.println(objList.toString());
+				} else if (input.equals("4")) {
 					System.out.println("Exiting...");
 					exit_flag = true;
 				} else {
@@ -64,7 +71,8 @@ public class Sender {
 		}
 	}
 
-	private static void serialize(String server, int port) throws IOException, Exception {
+	private static void serialize(String server, int port) throws IOException,
+			Exception {
 		System.out.println("Serialize and transfer to receiver?");
 		System.out.println("1. Yes");
 		System.out.println("2. No");
@@ -74,7 +82,7 @@ public class Sender {
 		if (input.equals("1")) {
 			for (Object obj : objList) {
 				System.out.println("Deserializing object...");
-				
+
 				Document doc = Serializer.serialize(obj);
 
 				File aFile = createFile(doc);
@@ -88,12 +96,10 @@ public class Sender {
 		}
 	}
 
-	public static File createFile(Document doc)
-			throws IOException {
+	public static File createFile(Document doc) throws IOException {
 		XMLOutputter out = new XMLOutputter();
 		File aFile = new File("sentdata.xml");
-		BufferedWriter writer = new BufferedWriter(
-				new FileWriter(aFile));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(aFile));
 		out.output(doc, writer);
 		writer.close();
 		return aFile;
@@ -104,12 +110,10 @@ public class Sender {
 		try {
 			Socket s = new Socket(server, port);
 			OutputStream output = s.getOutputStream();
-			FileInputStream fileInputStream = new FileInputStream(
-					aFile);
+			FileInputStream fileInputStream = new FileInputStream(aFile);
 			byte[] buffer = new byte[1024 * 1024];
 			int bytesRead = 0;
-			while ((bytesRead = fileInputStream
-					.read(buffer)) > 0) {
+			while ((bytesRead = fileInputStream.read(buffer)) > 0) {
 				output.write(buffer, 0, bytesRead);
 			}
 			fileInputStream.close();
@@ -118,24 +122,33 @@ public class Sender {
 		} catch (IOException e) {
 			System.out.println("connection refused");
 		}
-	}	
-	
+	}
+
 	private static void createCollection() throws IOException {
-		System.out.println("Enter a list of strings. Eg: 'this,is,a,list'");
-		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(
-				System.in));
-		String input = bufferRead.readLine();
-		String[] fields = input.split(",");
-		ArrayList<String> list = new ArrayList<String>();
-		for (String s : fields){
-			list.add(s);
+		boolean flag = false;
+		while (!flag) {
+			System.out.println("add an object to collection?");
+			System.out.println("1. Yes");
+			System.out.println("2. No");
+			BufferedReader bufferRead = new BufferedReader(
+					new InputStreamReader(System.in));
+			String input = bufferRead.readLine();
+			ArrayList<simpleObject> list = new ArrayList<simpleObject>();
+			if (input.equals("1")) {
+				simpleObject obj = createSimpleObject();
+				list.add(obj);
+			} else if (input.equals("2")) {
+				Object obj = new collectionObject(list);
+				objList.add(obj);
+				flag = true;
+			} else {
+				System.out.println("Invalid input");
+			}
 		}
-		Object obj = new collectionObject(list);
-		objList.add(obj);
 	}
 
 	private static void createSimpleArray() throws IOException {
-		System.out.println("Enter field values. Eg: '1,2,3'");
+		System.out.println("Enter array values. Eg: '1,2,3'");
 		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(
 				System.in));
 		String input = bufferRead.readLine();
@@ -153,79 +166,55 @@ public class Sender {
 	}
 
 	private static void createRefArray() throws IOException {
-		System.out.println("Enter number of points");
+		System.out.println("Enter length of array");
 		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(
 				System.in));
 		String input = bufferRead.readLine();
-		int number = Integer.parseInt(input);
-		List<int[]> points = new ArrayList<int[]>();
-		System.out
-				.println("Enter x and y values for a point: Eg '1,2'");
-		for (int i = 0; i < number; i++) {
-			bufferRead = new BufferedReader(
-					new InputStreamReader(System.in));
-			input = bufferRead.readLine();
-			String[] xy = input.split(",");
-			if (xy.length != 2) {
-				System.out.println("must enter 2 values");
-				break;
-			} else {
-				int[] _xy = new int[2];
-				_xy[0] = Integer.parseInt(xy[0]);
-				_xy[1] = Integer.parseInt(xy[1]);
-				points.add(_xy);
-			}
+		int length = Integer.parseInt(input);
+		simpleObject[] simpleObjArr = new simpleObject[length];
+		for (int i = 0; i < length; i++) {
+			simpleObject obj = createSimpleObject();
+			simpleObjArr[i] = obj;
 		}
-		Point[] _points = new Point[points.size()];
-		for (int i = 0; i < points.size(); i++) {
-			Point point = new Point(points.get(i)[0],
-					points.get(i)[1]);
-			_points[i] = point;
-		}
-		Object obj = new refArray(_points);
+		refArray obj = new refArray(simpleObjArr);
 		objList.add(obj);
 	}
 
 	private static void createRefObject() throws IOException {
-		System.out.println("Enter String");
-		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(
-				System.in));
-		String input = bufferRead.readLine();
-		
-		//String[] test = input.split(",");
-		//boolean b = true;
-		//simpleObject obj2 = new simpleObject(Integer.parseInt(test[0]),b);
-		String n = new String();
-		n=input;
-		Object obj = new refObject(n);
+		simpleObject simpleobj = createSimpleObject();
+		Object obj = new refObject(simpleobj);
 		objList.add(obj);
 	}
 
-	private static void createSimpleObject() throws IOException {
-		System.out.println("Enter field values.  Eg: '1,true'");
-		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(
-				System.in));
-		String input = bufferRead.readLine();
-		String[] fields = input.split(",");
-		if (fields.length != 2) {
-			System.out.println("You must enter exactly 2 parameters");
-		} else {
-			boolean bool = false;
-			if (fields[1].toLowerCase().equals("true")) {
-				bool = true;
-			} else if (fields[1].toLowerCase().equals("false")) {
-				bool = false;
+	private static simpleObject createSimpleObject() throws IOException {
+		boolean flag = false;
+		while (!flag) {
+			System.out.println("Enter field values.  Eg: '1,true'");
+			BufferedReader bufferRead = new BufferedReader(
+					new InputStreamReader(System.in));
+			String input = bufferRead.readLine();
+			String[] fields = input.split(",");
+			if (fields.length != 2) {
+				System.out.println("You must enter exactly 2 parameters");
 			} else {
-				System.out
-						.println("You must enter true or false for a boolean");
-			}
-			try {
-				int i = Integer.parseInt(fields[0]);
-				Object obj = new simpleObject(i, bool);
-				objList.add(obj);
-			} catch (Exception e) {
-				System.out.println("You must enter a number");
+				boolean bool = false;
+				if (fields[1].toLowerCase().equals("true")) {
+					bool = true;
+				} else if (fields[1].toLowerCase().equals("false")) {
+					bool = false;
+				} else {
+					System.out
+							.println("You must enter true or false for a boolean");
+				}
+				try {
+					int i = Integer.parseInt(fields[0]);
+					simpleObject obj = new simpleObject(i, bool);
+					return obj;
+				} catch (Exception e) {
+					System.out.println("You must enter a number");
+				}
 			}
 		}
+		return null;
 	}
 }

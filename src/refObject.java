@@ -3,9 +3,9 @@ public class refObject
 {
 	public refObject(){}
 
-	public refObject(String a) {
+	public refObject(simpleObject a) {
 		f1 = a;
 	}
    
-    public String f1;
+    public simpleObject f1;
 }
