@@ -1,12 +1,11 @@
 
 public class refObject
 {
+	public refObject(){}
 
-	public refObject() {
-	}
-	public refObject(Object a) {
+	public refObject(String a) {
 		f1 = a;
 	}
    
-    private Object f1;
+    public String f1;
 }

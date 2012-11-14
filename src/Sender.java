@@ -1,8 +1,8 @@
 import java.awt.Point;
 import java.io.*;
 import java.util.*;
-import org.jdom2.*;
-import org.jdom2.output.XMLOutputter;
+import org.jdom.*;
+import org.jdom.output.XMLOutputter;
 import java.net.Socket;
 
 public class Sender {
@@ -74,10 +74,10 @@ public class Sender {
 		if (input.equals("1")) {
 			for (Object obj : objList) {
 				System.out.println("Deserializing object...");
-				XMLOutputter out = new XMLOutputter();
+				
 				Document doc = Serializer.serialize(obj);
 
-				File aFile = createFile(out, doc);
+				File aFile = createFile(doc);
 
 				transferFile(server, port, aFile);
 			}
@@ -88,8 +88,9 @@ public class Sender {
 		}
 	}
 
-	private static File createFile(XMLOutputter out, Document doc)
+	public static File createFile(Document doc)
 			throws IOException {
+		XMLOutputter out = new XMLOutputter();
 		File aFile = new File("sentdata.xml");
 		BufferedWriter writer = new BufferedWriter(
 				new FileWriter(aFile));
@@ -190,7 +191,13 @@ public class Sender {
 		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(
 				System.in));
 		String input = bufferRead.readLine();
-		Object obj = new refObject(input);
+		
+		//String[] test = input.split(",");
+		//boolean b = true;
+		//simpleObject obj2 = new simpleObject(Integer.parseInt(test[0]),b);
+		String n = new String();
+		n=input;
+		Object obj = new refObject(n);
 		objList.add(obj);
 	}
 

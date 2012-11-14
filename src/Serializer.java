@@ -1,8 +1,8 @@
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
+import org.jdom.Document;
+import org.jdom.Element;
 
 //adapted from examples in the textbook
 public class Serializer {

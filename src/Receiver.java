@@ -1,8 +1,8 @@
 import java.io.*;
 import java.net.*;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.Document;
+import org.jdom.JDOMException;
 
 public class Receiver {
 	public static void main(String[] args) throws IOException {
@@ -55,8 +55,7 @@ public class Receiver {
 		Object obj = null;
 		try {
 			Document doc = (Document) builder.build(aFile);
-			Deserializer deserializer = new Deserializer();
-			obj = deserializer.deserialize(doc);
+			obj = Deserializer.deserialize(doc);
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
