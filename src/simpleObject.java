@@ -1,7 +1,9 @@
 
 public class simpleObject
 {
-
+	public simpleObject() {
+	}
+	
 	public simpleObject(int a, boolean b) {
 		f1 = a;
 		f2 = b;

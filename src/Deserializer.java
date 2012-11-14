@@ -8,7 +8,7 @@ import java.util.Map;
 //adapted from examples in the textbook
 public class Deserializer {
 	
-	public static Object deserialize(Document document) throws Exception {
+	public Object deserialize(Document document) throws Exception {
 		List objList = document.getRootElement().getChildren();
 		Map table = new HashMap();
 		createInstances(table, objList);
@@ -16,7 +16,7 @@ public class Deserializer {
 		return table.get("0");
 	}
 
-	private static void createInstances(Map table, List objList) throws Exception {
+	private void createInstances(Map table, List objList) throws Exception {
 		for (int i=0; i<objList.size(); i++) {
 			Element oElt = (Element) objList.get(i);
 			Class cls = Class.forName(oElt.getAttributeValue("class"));
@@ -33,7 +33,7 @@ public class Deserializer {
 		}
 	}
 	
-	private static void assignFieldValues(Map table, List objList) throws Exception {
+	private void assignFieldValues(Map table, List objList) throws Exception {
 		for (int i=0; i < objList.size(); i++) {
 			Element oElt = (Element) objList.get(i);
 			Object instance = table.get(oElt.getAttributeValue("id"));
@@ -59,7 +59,7 @@ public class Deserializer {
 		}
 	}
 	
-	private static Object deserializeValue(Element vElt, Class fieldType, Map table) {
+	private Object deserializeValue(Element vElt, Class fieldType, Map table) {
 		String valtype = vElt.getName();
 		if (valtype.equals("null"))
 			return null;
